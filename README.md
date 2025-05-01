@@ -1,0 +1,2 @@
+# MyGitLog
+Gitのログ管理
