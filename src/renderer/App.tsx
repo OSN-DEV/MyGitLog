@@ -21,6 +21,7 @@ const App  = () => {
 
   return(
     <>
+      <div className="text-red-800">TEST</div>
       <h3><a href="https://www.electronjs.org/docs/latest/tutorial/ipc#pattern-1-renderer-to-main-one-way" target="_blank" rel="noreferrer noopener">Pattern 1: Renderer to main (one-way)</a></h3>
         title: <input id="pattern1" /><button id="btn" type="button" onClick={pattern1Click}>set</button>
       <hr/>

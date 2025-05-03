@@ -120,3 +120,12 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+
+// const devServerURL = process.env.VITE_DEV_SERVER_HOSTNAME ? `http://${process.env.VITE_DEV_SERVER_HOSTNAME}:${process.env.VITE_DEV_SERVER_PORT}` : 'http://localhost:5173'; // Viteの開発サーバーのURLを取得
+// const isDev = process.env.NODE_ENV === 'development';
+// if (isDev && devServerURL) {
+//   settingWindow.loadURL(devServerURL);
+// } else {
+//   settingWindow.loadFile(join(__dirname, '../renderer/settings.html'))
+// }
