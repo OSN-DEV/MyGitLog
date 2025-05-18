@@ -7,6 +7,5 @@ contextBridge.exposeInMainWorld('mainApi', {
   counterValue: (value: number) => ipcRenderer.send('counter-value', value),
   onUpdateCounter: (callback: (event: any, value: number) => void) => {
     ipcRenderer.on('update-counter', (ev: IpcRendererEvent, value: number) => callback(ev, value))
-  },
+  }
 })
-

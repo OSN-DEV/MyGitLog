@@ -3,9 +3,12 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
+let showDevTool: boolean = false;
+let mainWindow: BrowserWindow | null = null;
+
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
@@ -18,34 +21,35 @@ function createWindow(): void {
   })
 
   // Pattern3
-  const menu  = Menu.buildFromTemplate([
+  const menu = Menu.buildFromTemplate([
     {
-    label: app.name,
-    submenu: [
-      {
-        click: () => {
-          mainWindow.webContents.send('update-counter', 1)
+      label: app.name,
+      submenu: [
+        { label: showDevTool ? 'hide dev tool' : 'show dev tool', click: () => toggleDevTool() },
+        {
+          click: () => {
+            mainWindow?.webContents.send('update-counter', 1)
+          },
+          label: 'increment'
         },
-        label: 'increment'
-      },
-      {
-        click: () => {
-          mainWindow.webContents.send('update-counter', -1)
-        },
-        label: 'decrement'
-      },
-    ]
-  }
+        {
+          click: () => {
+            mainWindow?.webContents.send('update-counter', -1)
+          },
+          label: 'decrement'
+        }
+      ]
+    }
   ])
   Menu.setApplicationMenu(menu)
-  
+
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow?.show()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
-    return { action: 'deny' }         // 新しいウィンドウを開くことを拒否(指定されたURLがデフォルトブラウザで表示されることを強要)
+    return { action: 'deny' } // 新しいウィンドウを開くことを拒否(指定されたURLがデフォルトブラウザで表示されることを強要)
   })
 
   // HMR for renderer base on electron-vite cli.
@@ -55,7 +59,6 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
-  
 }
 
 // This method will be called when Electron has finished
@@ -83,7 +86,7 @@ app.whenReady().then(() => {
     console.log(`set title:${title}`)
     win?.setTitle(title)
   })
-  
+
   // Pattern2
   ipcMain.handle('dialog:openFile', openFile)
 
@@ -101,12 +104,12 @@ app.whenReady().then(() => {
   })
 })
 
-const openFile = async(): Promise<string> => {
-  const {canceled, filePaths} = await dialog.showOpenDialog({})
+const openFile = async (): Promise<string> => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({})
   if (!canceled) {
     return filePaths[0]
   }
-  return ""
+  return ''
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -121,7 +124,6 @@ app.on('window-all-closed', () => {
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 
-
 // const devServerURL = process.env.VITE_DEV_SERVER_HOSTNAME ? `http://${process.env.VITE_DEV_SERVER_HOSTNAME}:${process.env.VITE_DEV_SERVER_PORT}` : 'http://localhost:5173'; // Viteの開発サーバーのURLを取得
 // const isDev = process.env.NODE_ENV === 'development';
 // if (isDev && devServerURL) {
@@ -129,3 +131,18 @@ app.on('window-all-closed', () => {
 // } else {
 //   settingWindow.loadFile(join(__dirname, '../renderer/settings.html'))
 // }
+
+/**
+ * Devツールの表示切替
+ */
+const toggleDevTool = (): void => {
+  if (null === mainWindow) {
+    return;
+  }
+  if (showDevTool) {
+    mainWindow.webContents.closeDevTools();
+  } else {
+    mainWindow.webContents.openDevTools();
+  }
+  showDevTool = !showDevTool;
+}

@@ -24,7 +24,10 @@
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
     "@tailwindcss/vite": "^4.1.5",
+    "@tanstack/react-table": "^8.21.3",
     "electron-updater": "^6.1.7",
+    "react-icons": "^5.5.0",
+    "react-select": "^5.10.1",
     "tailwindcss": "^4.1.5"
   },
   "devDependencies": {

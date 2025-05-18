@@ -1,5 +1,5 @@
-import React from "react"
-import BaseStyleProps from "./BaseStyleProps"
+import React from 'react'
+import BaseStyleProps from './BaseStyleProps'
 
 /**
  * ラベルコンポーネントプロパティ
@@ -13,10 +13,7 @@ interface LabelProps extends BaseStyleProps {
  * @param props プロパティ
  */
 const Label = (props: LabelProps) => {
-  return(
-    <>
-    </>
-  )
+  return <></>
 }
 
 export default Label
