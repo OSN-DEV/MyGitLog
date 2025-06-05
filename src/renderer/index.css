@@ -1,1 +1,10 @@
 @import 'tailwindcss';
+
+table.list {
+  width:100%;
+  background-color: red;
+
+  thead {
+    background-color: aqua;
+  }
+}

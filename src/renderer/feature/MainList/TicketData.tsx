@@ -4,10 +4,35 @@ import { TTicket } from "../../../@type/TTicket"
 
 const columnHelper  = createColumnHelper<TTicket>()
 const columns: ColumnDef<TTicket>[] = [
-  {accessorKey: 'title', header: 'タイトル'},
+  {
+    id: 'select',
+    header: ({ table }) => (
+      // <input
+      //   type="checkbox"
+      //   checked={table.getIsAllRowsSelected()}
+      //   onChange={table.getToggleAllRowsSelectedHandler()}
+      // />
+      <></>
+    ),
+    cell: ({ row }) => (
+      <>
+      <input
+        type="checkbox"
+        checked={row.getIsSelected()}
+        onChange={row.getToggleSelectedHandler()}
+      />
+      {row.original.title}
+      </>
+      
+    ),
+    size: 40,
+    enableSorting: false,
+    enableColumnFilter: false,
+  },
+  {accessorKey: 'title', header: 'タイトル', size:280},
   {accessorKey: 'no', header: 'no'},
   {accessorKey: 'status', header: 'ステータス'},
-  {accessorKey: 'asignee', header: '担当者'},
+  {accessorKey: 'asignee', header: '担当者', size:80},
 ]
 
 const data: TTicket[] = [
@@ -25,17 +50,20 @@ const TicketData = () => {
     debugTable:true,
     debugHeaders: true,
     debugColumns:true,
-    debugCells:true,
-    columnResizeMode:"onChange",
   })
 
   return(
-    <table>
-      <thead>
+    <>
+    
+    <table className="list">
+      <thead className="bg-red-200">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) =>(
-              <th key={header.id}>
+              <th key={header.id} 
+                style={{
+                  width:header.column.getSize(),
+                }}>
                 {flexRender(
                   header.column.columnDef.header,
                   header.getContext(),
@@ -48,6 +76,7 @@ const TicketData = () => {
       <tbody>
         {table.getRowModel().rows.map((row) => (
           <tr key={row.id}>
+
             {row.getVisibleCells().map((cell) => (
               <td key={cell.id}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -57,6 +86,7 @@ const TicketData = () => {
         ))}
       </tbody>
     </table>
+    </>
   )
 }
 export default TicketData
