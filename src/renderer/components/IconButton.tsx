@@ -28,9 +28,8 @@ const IconButton = (props: IconButtonProps) => {
   const { iconType, styles, onClick } = props
   const Icon = getIcon(iconType)
   const styleList = [
-    'text-[22pt]', 
+    styles ?? '',
     'cursor-pointer',
-    styles ?? ''
   ]
   return (
     <div onClick={onClick}>

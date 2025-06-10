@@ -1,6 +1,7 @@
 import { ColumnDef, createColumnHelper, getCoreRowModel, useReactTable , Table, flexRender} from "@tanstack/react-table"
 import React from "react"
 import { TTicket } from "../../../@type/TTicket"
+import IconButton, { IconType } from '../../components/IconButton'
 
 const columnHelper  = createColumnHelper<TTicket>()
 const columns: ColumnDef<TTicket>[] = [
@@ -16,12 +17,11 @@ const columns: ColumnDef<TTicket>[] = [
     ),
     cell: ({ row }) => (
       <>
-      <input
-        type="checkbox"
-        checked={row.getIsSelected()}
-        onChange={row.getToggleSelectedHandler()}
-      />
-      {row.original.title}
+      <IconButton 
+      styles="text-[18pt]"
+        iconType={IconType.Git} onClick={function (): void {
+          throw new Error("Function not implemented.")
+        } } />
       </>
       
     ),
@@ -56,7 +56,7 @@ const TicketData = () => {
     <>
     
     <table className="list">
-      <thead className="bg-red-200">
+      <thead className="bg-slate-200">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) =>(
@@ -75,13 +75,22 @@ const TicketData = () => {
       </thead>
       <tbody>
         {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
+          <tr key={row.id} className="m-8">
 
-            {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>
+            {row.getVisibleCells().map((cell, cellIndex, allCells) => {
+              let className = ''
+              if (cellIndex == 0) {
+                // className = 'px-3 py-2'
+              } else if (cellIndex == allCells.length - 1) {
+                // className = 'pe-3'
+              }
+            return (
+              <td key={cell.id} className={className}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
-            ))}
+            )
+          }
+          )}
           </tr>
         ))}
       </tbody>

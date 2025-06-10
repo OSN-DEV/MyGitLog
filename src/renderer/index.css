@@ -2,9 +2,14 @@
 
 table.list {
   width:100%;
-  background-color: red;
 
   thead {
-    background-color: aqua;
-  }
+    width: 100%;
+    tr {
+      height: 2em;
+    }
+    }
+    td {
+      padding: 10px 10px;
+    }
 }
