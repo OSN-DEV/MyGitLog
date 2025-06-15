@@ -1,4 +1,27 @@
 {
-  "files": [],
-  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
+  "extends": "@electron-toolkit/tsconfig/tsconfig.json",
+  "exclude": ["node_modules", "src/**/*.js"],
+  // "include": ["src/**/*.ts", "src/**/*.svelte", "src/preload/api.ts", "src/types/**/*.d.ts"],
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "Bundler",
+    "verbatimModuleSyntax": false,
+    "useDefineForClassFields": true,
+    "strict": true,
+    "allowJs": true,
+    "checkJs": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable", "ES2022"],
+    "esModuleInterop": true,
+    "noEmitOnError": false,
+    "baseUrl": ".",
+    "paths": {
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"],
+      "$src/*": ["src/*"]
+    },
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"]
+  }
 }

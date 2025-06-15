@@ -34,6 +34,7 @@ const Header = (props: HeaderProps) => {
    */
   const onSettingsClick = () => {
     devLog("onSettingsClick")
+    window.settingApi.showSettings()
   }
 
   /**

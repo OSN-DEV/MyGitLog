@@ -11,3 +11,9 @@ export type TSetting = {
   /** レポジトリ情報の一覧 */
   repositoryList: TRepository[]
 }
+
+export const EmptySetting: TSetting = {
+  endPoint: "",
+  ticketPrefix: "",
+  repositoryList: []
+}

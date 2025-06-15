@@ -47,9 +47,9 @@ const TicketData = () => {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    debugTable:true,
-    debugHeaders: true,
-    debugColumns:true,
+    debugTable:false,
+    debugHeaders: false,
+    debugColumns:false,
   })
 
   return(

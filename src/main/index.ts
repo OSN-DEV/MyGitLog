@@ -1,10 +1,17 @@
 import { app, shell, BrowserWindow, ipcMain, IpcMainEvent, dialog, Menu } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+import { ProcIfDef, ProcIfDefSetting } from './constants';
+import { devLog } from '../util/common';
+import { TSetting } from '../@type/TSetting';
+import { loadSettings } from './file';
+
+const devServerURL = process.env.VITE_DEV_SERVER_HOSTNAME ? `http://${process.env.VITE_DEV_SERVER_HOSTNAME}:${process.env.VITE_DEV_SERVER_PORT}` : 'http://localhost:5173'; // Viteの開発サーバーのURLを取得
+const isDev = process.env.NODE_ENV === 'development';
 
 let showDevTool: boolean = false;
-let mainWindow: BrowserWindow | null = null;
+let mainWindow: BrowserWindow
+let settingWindow: BrowserWindow | null = null
 
 function createWindow(): void {
   // Create the browser window.
@@ -96,6 +103,7 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+  registerEvent()
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -145,4 +153,62 @@ const toggleDevTool = (): void => {
     mainWindow.webContents.openDevTools();
   }
   showDevTool = !showDevTool;
+}
+
+
+/**
+ * register event
+ */
+const registerEvent = () => {
+  devLog('registerEvent')
+  // main window
+  ipcMain.handle(ProcIfDef.LoadSetting, handleLoadSetting)
+
+  // settings window
+  ipcMain.on(ProcIfDefSetting.ShowSettings, handleShowSettings);
+}
+
+
+// ----------------------------------------------------------------------------------------------------
+// MainScreen event
+// ----------------------------------------------------------------------------------------------------
+/**
+ * 設定情報を取得
+ * @returns 設定情報
+ */
+const handleLoadSetting = async() : Promise<TSetting> => {
+  devLog('handleLoadSetting')
+  return loadSettings()
+}
+
+
+// ----------------------------------------------------------------------------------------------------
+// Settings screen event
+// ----------------------------------------------------------------------------------------------------
+/**
+ * 設定画面を表示
+ */
+const handleShowSettings = () => {
+  devLog(`handleShowSettings`)
+  if (settingWindow != null) {
+    return
+  }
+
+
+  settingWindow = new BrowserWindow({
+    width: 400,
+    height: 300,
+    modal: true,
+    parent: mainWindow, // 親ウィンドウを指定してモーダルにする
+    webPreferences: {
+      preload: join(__dirname, '../preload/index.js'),
+      sandbox: false
+    }
+  })
+  if (isDev && devServerURL) {
+    settingWindow.loadURL(`${devServerURL}/settings.html`);
+  } else {
+    settingWindow.loadFile(join(__dirname, '../renderer/settings.html'))
+  }
+  settingWindow.webContents.openDevTools();
 }
