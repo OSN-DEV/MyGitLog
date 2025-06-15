@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+
+table.list {
+  width:100%;
+
+  thead {
+    width: 100%;
+    tr {
+      height: 2em;
+    }
+  }
+  td {
+      padding: 10px 10px;
+  }
+}
