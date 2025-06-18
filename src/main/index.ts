@@ -197,9 +197,12 @@ const handleShowSettings = () => {
 
   settingWindow = new BrowserWindow({
     width: 400,
-    height: 300,
+    height: 500,
     modal: true,
     parent: mainWindow, // 親ウィンドウを指定してモーダルにする
+    resizable: false,
+    minimizable: false,
+    maximizable: false,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
@@ -210,5 +213,6 @@ const handleShowSettings = () => {
   } else {
     settingWindow.loadFile(join(__dirname, '../renderer/settings.html'))
   }
+  settingWindow.setMenu(null)
   settingWindow.webContents.openDevTools();
 }
