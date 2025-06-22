@@ -214,5 +214,8 @@ const handleShowSettings = () => {
     settingWindow.loadFile(join(__dirname, '../renderer/settings.html'))
   }
   settingWindow.setMenu(null)
-  settingWindow.webContents.openDevTools();
+  settingWindow.on('closed', () => {
+    settingWindow = null
+  })
+  // settingWindow.webContents.openDevTools();
 }

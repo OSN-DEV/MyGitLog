@@ -1,8 +1,21 @@
 import React from 'react'
 import EditText from '../../components/EditText'
+import TextButton from '../../components/TextButton'
 import { TSetting } from '../../../@type/TSetting'
+import { devLog } from '../../../util/common'
 
 const SettingForm = () => {
+  /** Saveクリック */
+  const onSaveClick = () => {
+    devLog('onSaveClick')
+    window.close()
+  }
+
+  /** Cancedlクリック */
+  const onCancelClick = () => {
+    devLog('onCancelClick')
+    window.close()
+  }
   const data : TSetting = {
     endPoint: 'end',
     ticketPrefix: 'NEWCLODEV',
@@ -21,10 +34,15 @@ const SettingForm = () => {
 
       <br/>
       {
-        data.repositoryList.map((repo) => {
-          return <EditText title={repo.displayName} text={repo.url}/>
+        data.repositoryList.map((repo, index) => {
+          return <EditText key={index} title={repo.displayName} text={repo.url}/>
         })
       }
+      <div className='mt-5 text-center'>
+        <TextButton caption='Save' onClick={onSaveClick} styles={'text-indigo-500 hover:text-indigo-400 active:text-indigo-700'}/>
+        <span className='inline-block w-[1em]'/>
+        <TextButton caption='Cancel' onClick={onCancelClick} styles={'text-gray-500 hover:text-gray-400 active:text-gray-700'}/>
+      </div>
     </form>
   )
 }
