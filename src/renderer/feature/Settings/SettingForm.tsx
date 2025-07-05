@@ -1,41 +1,93 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import EditText from '../../components/EditText'
 import TextButton from '../../components/TextButton'
-import { TSetting } from '../../../@type/TSetting'
+import { EmptySetting, TSetting } from '../../../@type/TSetting'
 import { devLog } from '../../../util/common'
+import BaseStyleProps from '$src/renderer/components/BaseStyleProps'
+
+interface SettingFormProps extends BaseStyleProps {
+  setting: TSetting
+}
+
+// フォームは状態管理せずに実装できるよ
+// https://qiita.com/nuko-suke/items/1393995fd53ecaeb1cbc
 
 const SettingForm = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [data, setData] = useState<TSetting>(EmptySetting)
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    const loading = async() => {
+      const data = await window.mainApi.getSetting()
+      setData(data)
+    }
+    loading()
+    setIsLoading(false)
+  }, [isLoading])
+
   /** Saveクリック */
-  const onSaveClick = () => {
+  const onSaveClick = async(event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+//     const formData = new FormData(formRef.current);
+//     const data: FormFields = {
+//       name: formData.get("name") as string,
+//       email: formData.get("email") as string,
+//       age: formData.get("age") as string,
+//       address: formData.get("address") as string,
+//     };
+    const formData = new FormData(formRef.current!!)
+
+    const getString = (key:string): string => {
+      return (formData.get(key) as string) || ''
+    }
+    
+    const saveData: TSetting = {
+      endPoint: getString('end-point'),
+      ticketPrefix:getString('ticket-prefix'),
+      repositoryList: [
+        {displayName: getString('title-repo0'),url:getString('repo0')},
+        {displayName: getString('title-repo1'),url:getString('repo1')},
+        {displayName: getString('title-repo2'),url:getString('repo2')},
+        {displayName: getString('title-repo3'),url:getString('repo3')},
+      ]
+    }
+    devLog(JSON.stringify(saveData))
+    await window.settingApi.saveSettings(saveData)
     devLog('onSaveClick')
     window.close()
   }
+
 
   /** Cancedlクリック */
   const onCancelClick = () => {
     devLog('onCancelClick')
     window.close()
   }
-  const data : TSetting = {
-    endPoint: 'end',
-    ticketPrefix: 'NEWCLODEV',
-    repositoryList: [
-      { displayName: 'Android Print', url:'aaa' },
-      { displayName: 'iOS Print', url:'bbb' },
-      { displayName: 'Android Cloud', url:'aaa' },
-      { displayName: 'iOS Cloud', url:'aaa' },
-    ]
+  // const data : TSetting = {
+  //   endPoint: 'end',
+  //   ticketPrefix: 'NEWCLODEV',
+  //   repositoryList: [
+  //     { displayName: 'Android Print', url:'aaa' },
+  //     { displayName: 'iOS Print', url:'bbb' },
+  //     { displayName: 'Android Cloud', url:'aaa' },
+  //     { displayName: 'iOS Cloud', url:'aaa' },
+  //   ]
+  // }
+
+  if (isLoading) {
+    return (<p>is loading...</p>)
   }
 
   return(
-    <form className='p-5'>
-      <EditText title='Project Management Site' text={data.endPoint } />
-      <EditText title='Ticket Prefix' text={data.ticketPrefix} />
+    <form className='p-5' ref={formRef}>
+      <EditText name="end-point" title='Project Management Site' text={data.endPoint } />
+      <EditText name="ticket-prefix" title='Ticket Prefix' text={data.ticketPrefix} />
 
       <br/>
       {
         data.repositoryList.map((repo, index) => {
-          return <EditText key={index} title={repo.displayName} text={repo.url}/>
+          return <EditText name={`repo${index}`} key={index} title={repo.displayName} text={repo.url}/>
         })
       }
       <div className='mt-5 text-center'>

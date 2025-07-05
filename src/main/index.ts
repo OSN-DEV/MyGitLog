@@ -4,7 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { ProcIfDef, ProcIfDefSetting } from './constants';
 import { devLog } from '../util/common';
 import { TSetting } from '../@type/TSetting';
-import { loadSettings } from './file';
+import { loadSettings, saveSettings } from './file';
 
 const devServerURL = process.env.VITE_DEV_SERVER_HOSTNAME ? `http://${process.env.VITE_DEV_SERVER_HOSTNAME}:${process.env.VITE_DEV_SERVER_PORT}` : 'http://localhost:5173'; // Viteの開発サーバーのURLを取得
 const isDev = process.env.NODE_ENV === 'development';
@@ -165,7 +165,8 @@ const registerEvent = () => {
   ipcMain.handle(ProcIfDef.LoadSetting, handleLoadSetting)
 
   // settings window
-  ipcMain.on(ProcIfDefSetting.ShowSettings, handleShowSettings);
+  ipcMain.on(ProcIfDefSetting.ShowSettings, handleShowSettings)
+  ipcMain.on(ProcIfDefSetting.SaveSettings, (_, settings) => handleSaveSettings(settings))
 }
 
 
@@ -217,5 +218,14 @@ const handleShowSettings = () => {
   settingWindow.on('closed', () => {
     settingWindow = null
   })
-  // settingWindow.webContents.openDevTools();
+  settingWindow.webContents.openDevTools();
+}
+
+/**
+ * 設定情報を保存する
+ * @param settings 保存する設定情報
+ */
+const handleSaveSettings = (settings:TSetting) =>  {
+  devLog(`handleSaveSettings`)
+  saveSettings(settings)
 }

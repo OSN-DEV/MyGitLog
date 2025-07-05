@@ -22,10 +22,16 @@ contextBridge.exposeInMainWorld('mainApi', {
 
 contextBridge.exposeInMainWorld('settingApi', {
   /**
- * 設定画面を表示
- */
+  * 設定画面を表示
+  */
   showSettings:() => ipcRenderer.send(ProcIfDefSetting.ShowSettings),
 
+  /**
+   * 設定情報を保存する
+   * @param settings 保存する設定情報
+   * @returns なし
+   */
+  saveSettings:(settings:TSetting) => ipcRenderer.send(ProcIfDefSetting.SaveSettings, settings)
   /**
    * 設定画面のクローズ
    * @param callback コールバック

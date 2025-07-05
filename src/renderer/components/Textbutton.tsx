@@ -3,7 +3,7 @@ import BaseStyleProps from './BaseStyleProps'
 
 interface EditTextProps extends BaseStyleProps {
   caption: string,
-  onClick: () => void
+  onClick: (event:React.MouseEvent<HTMLButtonElement>) => void
 }
 
 const TextButton = (props: EditTextProps): ReactNode => {
