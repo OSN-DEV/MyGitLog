@@ -27,7 +27,10 @@ enum ProcIfDefMain {
  * プロセス間インターフェース定義(設定画面)
  */
 enum ProcIfDefSetting {
-  ShowSettings = 'my-git-log-setting:show-settings'
+  /** 設定画面を表示 */
+  ShowSettings = 'my-git-log-setting:show-settings',
+  /** 設定情報を保存 */
+  SaveSettings = 'my-git-log-setting:save-settings',
 }
 
 

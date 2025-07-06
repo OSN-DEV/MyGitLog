@@ -13,3 +13,19 @@ table.list {
       padding: 10px 10px;
   }
 }
+
+.edit-text {
+  margin-top: 0.8em;
+  label { 
+    span  {
+      font-size: small;
+      color: #aaaaaa;
+      display: block;
+    }
+    input{
+      border-bottom: solid 1px #cccccc;
+      width: 100%;
+    }
+  }
+
+}

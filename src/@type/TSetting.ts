@@ -15,5 +15,10 @@ export type TSetting = {
 export const EmptySetting: TSetting = {
   endPoint: "",
   ticketPrefix: "",
-  repositoryList: []
+  repositoryList: [
+    {displayName:'Print(Android)', url:''},
+    {displayName:'Print(iOS)', url:''},
+    {displayName:'Cloud(Android)', url:''},
+    {displayName:'Cloud(iOS)', url:''},
+  ]
 }

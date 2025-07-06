@@ -37,5 +37,5 @@ export const saveSettings = async(settings: TSetting) => {
  */
 const getSettingFile = ():string => {
   const app = require('electron').app
-  return `app.getPath('useData')/setting.data`
+  return `${app.getPath('userData')}/setting.data`
 }

@@ -1,4 +1,5 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
+import { TSetting } from './TSetting'
 
 declare global {
   interface Window {
@@ -27,6 +28,13 @@ export interface ISettingsApi {
    * 設定画面を表示
    */
   showSettings:() => void,
+
+  /**
+   * 設定情報を保存する
+   * @param settings 保存する設定
+   */
+  saveSettings:(settings:TSetting) => Promise<void>
+
   /**
    * 設定画面のクローズ
    * @param callback コールバック

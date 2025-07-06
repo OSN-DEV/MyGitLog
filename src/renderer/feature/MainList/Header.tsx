@@ -3,16 +3,26 @@ import Spinner from '../../components/Spinner'
 import BaseStyleProps from '../../components/BaseStyleProps'
 import IconButton, { IconType } from '../../components/Iconbutton'
 import { devLog } from '../../../util/common'
+import { TRepository } from '../../../@type/TRepository'
 
-interface HeaderProps extends BaseStyleProps {}
+interface HeaderProps extends BaseStyleProps {
+  repositoryList: TRepository[]
+}
 
 const Header = (props: HeaderProps) => {
-  const { styles } = props
+  const { styles, repositoryList } = props
+
+  devLog(JSON.stringify(repositoryList))
+
   const styleList: string[] = ['flex', 'items-end', styles ?? '']
-  const targets = [
-    { label: 'Print(And)', value: 'pa' },
-    { label: 'Print(ios)', value: 'pi' }
-  ]
+  // const targets = [
+  //   { label: 'Print(And)', value: 'pa' },
+  //   { label: 'Print(ios)', value: 'pi' }
+  // ]
+  const targets = repositoryList.map((repo) => {
+    return {label:repo.displayName, value: repo.displayName}
+  })
+  devLog(JSON.stringify(targets))
   const branches = [
     { label: 'v7.0/develop', value: 'v7dev' },
     { label: 'v8.0/develop', value: 'v8dev' }
@@ -46,8 +56,8 @@ const Header = (props: HeaderProps) => {
 
   return (
     <div className={styleList.join(' ').trim()}>
-      <Spinner title="target" options={branches} />
-      <Spinner title="branch" options={targets} styles="ms-[1em]" />
+      <Spinner title="target" options={targets} />
+      <Spinner title="branch" options={branches} styles="ms-[1em]" />
       <Spinner title="tag" options={tags} styles="ms-[1em]" />
       <IconButton 
       iconType={IconType.Search} 
